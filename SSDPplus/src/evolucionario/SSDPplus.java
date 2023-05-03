@@ -144,17 +144,43 @@ public class SSDPplus {
         return Pk;
     }
   
-    
+
+    public static void printDataSetInformations() {
+        System.out.format("%n### Data set: %s" +
+                "%n|Itens| = %s;" +
+                "%n|Attributes| = %s;" +
+                "%n|Exemplos Numbers| = %s;" +
+                "%n|Positive Exemplos D+| = %s;" +
+                "%n|Negative Exemplos D-| = %s;" +
+                "%n \n", D.nomeBase, D.numeroItens, D.numeroAtributos, D.numeroExemplos, D.numeroExemplosPositivo,
+                D.numeroExemplosNegativo);
+    }
+
+    public static void printExecutionInformations(String tipoAvaliacao, double tempo, Pattern[] p, int k) {
+        System.out.format("%n### Execution Informations: %n" +
+                "%n|Average %s| = %f;" +
+                "%n|Time(s)| = %f;" +
+                "%n|Average size| = %.3f;" +
+                "%n|Coverage of all Pk DPs in relation to D+| = %f%%;" +
+                "%n|Description Redundancy Item Dominador (|itemDominador|/k)| = %.3f;" +
+                "%n|Number of individuals generated| = %d;" +
+                "%n", tipoAvaliacao, Avaliador.avaliarMedia(p, k), tempo,
+                Avaliador.avaliarMediaDimensoes(p, k), Avaliador.coberturaPositivo(p, k) * 100,
+                DPinfo.descritionRedundancyDominator(p), Pattern.numeroIndividuosGerados);
+    }
     
     
     public static void main(String args[]) throws FileNotFoundException{
         //*******************************************
         //Data set                    ***************
         //*******************************************
-        String caminho = "/workspace/SSDPP/SSDPplus/pastas/bases/"; 
-        String nomeBase = "ENEM2014_81_NOTA_10k.csv";
+        //String caminho = "/workspace/SSDPP/SSDPplus/pastas/bases/"; 
         //String nomeBase = "ENEM2014_81_NOTA_10k.csv";
         //String nomeBase = "matrixBinaria-Global-100-p.csv";
+
+        String caminho = "SSDPplus/BasesTestes/";
+        String nomeBase = "arXiv_resumoTitulo.csv";
+
         String caminhoBase = caminho + nomeBase;
        
         //separator database (CSV files)
@@ -181,7 +207,7 @@ public class SSDPplus {
         //Similarity function
         Pattern.medidaSimilaridade = Const.SIMILARIDADE_JACCARD; //similarity function (default JACCARD)
         //Target (atributevalue)
-        String target = "p";
+        String target = "116";
         
         //*******************************************
         //END SSDP+ parameters            ***************
@@ -193,14 +219,13 @@ public class SSDPplus {
         //max time simulation in second (-1 for infinity)
         double maxTimeSecond =  -1;      
         
-        System.out.println("Loading data set...");
+        System.out.println("\nLoading data set...");
+
         D.CarregarArquivo(caminhoBase, D.TIPO_CSV); //Loading data set        
         D.GerarDpDn(target);
         //"6,80,104,116,134,145,151,153,156,256"; //target value
         //D.valorAlvo = "I-III";
         //D.valorAlvo = "IV-VII";
-        
-        
         
         //*******************************************
         //FILTER BY ATTRIBUTE, VALUES AND ITEMS *****
@@ -209,8 +234,8 @@ public class SSDPplus {
         //String[] filtrarAtributos = {"x.X267"};
         String[] filtrarAtributos = null;
         //Filter by values
-        String[] filtrarValores = null;
-        //String[] filtrarValores = {"", "NA"};
+        //String[] filtrarValores = null;
+        String[] filtrarValores = {"", "NA", "zero"};
         //Filter by items
         String[][] filtrarAtributosValores = null;
         //String[][] filtrarAtributosValores = new String[2][2];
@@ -222,42 +247,27 @@ public class SSDPplus {
         //EDN FILTER BY ATTRIBUTE, VALUES AND ITEMS *****
         //*******************************************
        
-        
         //Executar filtros        
         D.filtrar(filtrarAtributos, filtrarValores, filtrarAtributosValores);
                
         Pattern.numeroIndividuosGerados = 0; //Initializing count of generated individuals
-        System.out.println("### Data set:" + D.nomeBase + "(|I|=" + D.numeroItens + 
-                "; |A|=" + D.numeroAtributos +
-                "; |D|=" + D.numeroExemplos +
-                "; |D+|=" + D.numeroExemplosPositivo +
-                "; |D-|=" + D.numeroExemplosNegativo +
-                 ")"); //database name
+        //Informations about top-k DPs: 
+        printDataSetInformations(); //database name
         
-        
-        
-        System.out.println("SSDP+ running...");
+        System.out.println("\nSSDP+ running...");
         //Rodando SSDP
         long t0 = System.currentTimeMillis(); //Initial time
         //Pattern[] p = SSDPplus.run(k, tipoAvaliacao, similaridade);
         Pattern[] p = SSDPplus.run(k, tipoAvaliacao, similaridade, maxTimeSecond);
         double tempo = (System.currentTimeMillis() - t0)/1000.0; //time
         
-        System.out.println("\n### Top-k subgroups:");
+        System.out.println("\n### Top-k subgroups:\n");
         Avaliador.imprimirRegras(p, k); 
         
-        //Informations about top-k DPs:  
-        System.out.println("### Data set:" + D.nomeBase + "(|I|=" + D.numeroItens + 
-                "; |A|=" + D.numeroAtributos +
-                "; |D+|=" + D.numeroExemplosPositivo +
-                "; |D-|=" + D.numeroExemplosNegativo +
-                 ")"); //database name
-        System.out.println("Average " + tipoAvaliacao + ": " + Avaliador.avaliarMedia(p, k));
-        System.out.println("Time(s): " + tempo);
-        System.out.println("Average size: " + Avaliador.avaliarMediaDimensoes(p,k));        
-        System.out.println("Coverage of all Pk DPs in relation to D+: " + Avaliador.coberturaPositivo(p, k)*100 + "%");
-        System.out.println("Description Redundancy Item Dominador (|itemDominador|/k): " + DPinfo.descritionRedundancyDominator(p));
-        System.out.println("Number of individuals generated: " + Pattern.numeroIndividuosGerados);
+        //Informations about top-k DPs: 
+        printExecutionInformations(tipoAvaliacao, tempo, p, k);
+ 
+        printDataSetInformations();
         
         System.out.println("\n### Top-k and caches");
         //Avaliador.imprimirRegrasSimilares(p, k); 
@@ -275,6 +285,7 @@ public class SSDPplus {
             //Const.METRICA_COV,
             //Const.METRICA_CONF            
         };
+
         Avaliador.imprimirRegras(p, k, metricas, false, false, true);
               
     }
