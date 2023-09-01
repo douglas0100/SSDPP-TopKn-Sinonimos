@@ -172,12 +172,12 @@ public class SSDPplus {
         //*******************************************
         //Data set                    ***************
         //*******************************************
-        //String caminho = "/workspace/SSDPP/SSDPplus/pastas/bases/"; 
-        //String nomeBase = "ENEM2014_81_NOTA_10k.csv";
+        String caminho = "/workspace/SSDPP/SSDPplus/pastas/bases/"; 
+        String nomeBase = "ENEM2014_81_NOTA_10k.csv";
         //String nomeBase = "matrixBinaria-Global-100-p.csv";
 
-        String caminho = "SSDPplus/BasesTestes/";
-        String nomeBase = "arXiv_resumoTitulo.csv";
+        //String caminho = "SSDPplus/BasesTestes/";
+        //String nomeBase = "arXiv_resumoTitulo.csv";
 
         String caminhoBase = caminho + nomeBase;
        
@@ -205,7 +205,8 @@ public class SSDPplus {
         //Similarity function
         Pattern.medidaSimilaridade = Const.SIMILARIDADE_JACCARD; //similarity function (default JACCARD)
         //Target (atributevalue)
-        String target = "116";
+        //String target = "116";
+        String target = "p";
         
         //*******************************************
         //END SSDP+ parameters            ***************
