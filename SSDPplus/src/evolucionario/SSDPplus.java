@@ -138,8 +138,6 @@ public class SSDPplus {
             numeroGeracoesSemMelhoraPk = 0;
         }
         
-               
-        
         //return Pbest;
         return Pk;
     }
@@ -196,10 +194,10 @@ public class SSDPplus {
         //SSDP+ parameters            ***************
         //*******************************************
         //k: number of subgroups
-        int k = 10; 
+        int k = 10;
         //Evaluation metric
-        String tipoAvaliacao = Avaliador.METRICA_AVALIACAO_WRACC; 
-        //String tipoAvaliacao = Avaliador.METRICA_AVALIACAO_QG;
+        //String tipoAvaliacao = Avaliador.METRICA_AVALIACAO_WRACC; 
+        String tipoAvaliacao = Avaliador.METRICA_AVALIACAO_QG;
         //ks: cache size
         Pattern.maxSimulares = 5; 
         //min_similarity
@@ -232,7 +230,8 @@ public class SSDPplus {
         //*******************************************
         //Filter by attribute
         //String[] filtrarAtributos = {"x.X267"};
-        String[] filtrarAtributos = null;
+        //String[] filtrarAtributos = null;
+        String[] filtrarAtributos = {"base", "paper", "studi", "uncertainti", "numer"};
         //Filter by values
         //String[] filtrarValores = null;
         String[] filtrarValores = {"", "NA", "zero"};
