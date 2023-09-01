@@ -137,6 +137,7 @@ public class SSDPplus {
             
             numeroGeracoesSemMelhoraPk = 0;
         }
+
         
         //return Pbest;
         return Pk;
@@ -232,7 +233,7 @@ public class SSDPplus {
         //Filter by attribute
         //String[] filtrarAtributos = {"x.X267"};
         //String[] filtrarAtributos = null;
-        String[] filtrarAtributos = {"base", "paper", "studi", "uncertainti", "numer"};
+        //String[] filtrarAtributos = {"base", "paper", "studi", "uncertainti", "numer"};
         //Filter by values
         //String[] filtrarValores = null;
         String[] filtrarValores = {"", "NA", "zero"};
@@ -258,12 +259,34 @@ public class SSDPplus {
         //Rodando SSDP
         long t0 = System.currentTimeMillis(); //Initial time
         //Pattern[] p = SSDPplus.run(k, tipoAvaliacao, similaridade);
+
+        
         Pattern[] p = SSDPplus.run(k, tipoAvaliacao, similaridade, maxTimeSecond);
         double tempo = (System.currentTimeMillis() - t0)/1000.0; //time
         
         System.out.println("\n### Top-k subgroups:\n");
         Avaliador.imprimirRegras(p, k); 
+
+        //#region [Top-k/n]
+
+        int n = 3;
+
+        int kn = k/n;
+
+        Pattern[] aux = new Pattern[kn];
+
+        aux = SSDPplus.run(kn, tipoAvaliacao, similaridade, maxTimeSecond);
         
+        Pattern[] pkn = new Pattern[k];
+        
+        for (int i = 0; i < kn / n; i++) {
+            pkn[i] = aux[i];
+
+            String[] filtrarAtributos = aux[i].toString();
+        }
+
+        //#endregion
+
         //Informations about top-k DPs: 
         printExecutionInformations(tipoAvaliacao, tempo, p, k);
  
