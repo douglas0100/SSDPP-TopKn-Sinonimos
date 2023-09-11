@@ -275,17 +275,107 @@ public class SSDPplus {
         Avaliador.imprimirRegras(p, k); 
 
 
+        Pattern[] q = SSDPplus.run(k, tipoAvaliacao, similaridade, maxTimeSecond);
+        
+        System.out.println("\n### Top-k subgroups:\n");
+        Avaliador.imprimirRegras(q, k); 
+
+        Pattern[] e = SSDPplus.run(k, tipoAvaliacao, similaridade, maxTimeSecond);
+        
+        System.out.println("\n### Top-k subgroups:\n");
+        Avaliador.imprimirRegras(e, k); 
 
 
 
 
 
 
+
+
+
+
+        //#region [Top-k/n (roda o ssdpp buscando os top k/n termos e armazena os k/n termos n vezes)]
+
+        // System.out.println("\n### Top-kn subgroups:\n");
+
+        // int execucoes = 0;
+
+        // List<String> allAtributos = new ArrayList<>();
+
+        // List<String> subAtributos = new ArrayList<>();
+
+        // Pattern[] pkn = new Pattern[k];
+
+        // int newkn = 0;
+
+        // int n = 3;
+
+        // int kn = k / n;
+
+        // while (execucoes < n) {
+
+        //     Pattern[] aux = new Pattern[kn];
+
+        //     D.filtrar(filtrarAtributos, filtrarValores, filtrarAtributosValores);
+
+        //     String[] subAtributosFiltrados = null;
+
+        //     aux = SSDPplus.run(kn, tipoAvaliacao, similaridade, maxTimeSecond);
+
+        //     subAtributos.clear();
+
+        //     for (int i = 0; i < kn; i++) {
+
+        //         pkn[i + newkn] = aux[i];
+
+        //         String[] atributos = aux[i].getAtributos();
+
+        //         for (String atributo : atributos) {
+
+        //             if(atributo!= null && !allAtributos.contains(atributo)){
+        //                 allAtributos.add(atributo);
+        //                 subAtributos.add(atributo);
+        //             }
+
+        //         }
+
+        //     }
+
+        //     subAtributosFiltrados = subAtributos.toArray(new String[0]);
+
+        //     filtrarAtributos = allAtributos.toArray(new String[0]);
+
+        //     Avaliador.imprimirRegras(aux, kn);
+
+        //     imprimeAtributosFiltrados(subAtributosFiltrados);
+
+        //     newkn += kn;
+
+        //     execucoes++;
+        // }
+
+        // Avaliador.imprimirRegras(pkn, k);
+
+        // imprimeAtributosFiltrados(filtrarAtributos);
+
+        // printExecutionInformations(tipoAvaliacao, tempo, pkn, k);
 
         
 
+        //#endregion
 
-        //#region [Top-k/n]
+
+
+
+
+
+
+
+
+
+
+        //#region [Top-k/n (roda o ssdpp buscando os top k termos e armazena os k/n termos n vezes)]
+
 
         System.out.println("\n### Top-kn subgroups:\n");
 
@@ -305,13 +395,13 @@ public class SSDPplus {
 
         while (execucoes < n) {
 
-            Pattern[] aux = new Pattern[kn];
-
-            D.filtrar(filtrarAtributos, filtrarValores, filtrarAtributosValores);
+            Pattern[] aux = new Pattern[k];
 
             String[] subAtributosFiltrados = null;
 
-            aux = SSDPplus.run(kn, tipoAvaliacao, similaridade, maxTimeSecond);
+            D.filtrar(filtrarAtributos, filtrarValores, filtrarAtributosValores);
+
+            aux = SSDPplus.run(k, tipoAvaliacao, similaridade, maxTimeSecond);
 
             subAtributos.clear();
 
@@ -351,14 +441,7 @@ public class SSDPplus {
 
         printExecutionInformations(tipoAvaliacao, tempo, pkn, k);
 
-        
-
         //#endregion
-
-
-
-
-
 
 
 
