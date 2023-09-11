@@ -232,7 +232,7 @@ public class SSDPplus {
         //*******************************************
         //Filter by attribute
         //String[] filtrarAtributos = {"x.X267"};
-        //String[] filtrarAtributos = null;
+        String[] filtrarAtributos = null;
         //String[] filtrarAtributos = {"base", "paper", "studi", "uncertainti", "numer"};
         //Filter by values
         //String[] filtrarValores = null;
@@ -261,34 +261,46 @@ public class SSDPplus {
         //Pattern[] p = SSDPplus.run(k, tipoAvaliacao, similaridade);
 
         
-        Pattern[] p = SSDPplus.run(k, tipoAvaliacao, similaridade, maxTimeSecond);
-        double tempo = (System.currentTimeMillis() - t0)/1000.0; //time
+        //Pattern[] p = SSDPplus.run(k, tipoAvaliacao, similaridade, maxTimeSecond);
+        //double tempo = (System.currentTimeMillis() - t0)/1000.0; //time
         
-        System.out.println("\n### Top-k subgroups:\n");
-        Avaliador.imprimirRegras(p, k); 
+        //System.out.println("\n### Top-k subgroups:\n");
+        //Avaliador.imprimirRegras(p, k); 
 
         //#region [Top-k/n]
 
-        int n = 3;
+        System.out.println("\n### Top-kn subgroups:\n");
 
-        int kn = k/n;
+        int execucoes = 3;
 
-        Pattern[] aux = new Pattern[kn];
+        while (execucoes == 0) {
+            int n = 3;
 
-        aux = SSDPplus.run(kn, tipoAvaliacao, similaridade, maxTimeSecond);
-        
-        Pattern[] pkn = new Pattern[k];
-        
-        for (int i = 0; i < kn / n; i++) {
-            pkn[i] = aux[i];
+            int kn = k / n;
 
-            String[] filtrarAtributos = aux[i].toString();
+            Pattern[] aux = new Pattern[kn];
+
+            aux = SSDPplus.run(kn, tipoAvaliacao, similaridade, maxTimeSecond);
+
+            Pattern[] pkn = new Pattern[k];
+
+            for (int i = 0; i < kn / n; i++) {
+                pkn[i] = aux[i];
+
+                filtrarAtributos = aux[i].getAtributos();
+            }
+
+            Avaliador.imprimirRegras(pkn, k);
+
+            execucoes--;
         }
+
+        
 
         //#endregion
 
         //Informations about top-k DPs: 
-        printExecutionInformations(tipoAvaliacao, tempo, p, k);
+        //printExecutionInformations(tipoAvaliacao, tempo, p, k);
  
         printDataSetInformations();
         
@@ -309,7 +321,7 @@ public class SSDPplus {
             //Const.METRICA_CONF            
         };
 
-        Avaliador.imprimirRegras(p, k, metricas, false, false, true);
+        //Avaliador.imprimirRegras(p, k, metricas, false, false, true);
               
     }
 }

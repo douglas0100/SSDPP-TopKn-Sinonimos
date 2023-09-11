@@ -113,18 +113,18 @@ public class Pattern implements Comparable<Pattern>, Serializable {
         Iterator iterator = itens.iterator();
         int[] itensArray = new int[itens.size()];
         int indice = 0;
-        String result[];
+        String atributos[];
 
         while (iterator.hasNext()) {
             itensArray[indice++] = (int) iterator.next();
         }
         Arrays.sort(itensArray);
 
-        StringBuilder str = new StringBuilder("");
-
+        atributos = new String[itensArray.length];
         for (int j = 0; j < itensArray.length - 1; j++) {
-            str.append(D.itemAtributoStr[itensArray[j]]);
+            atributos[j] = D.itemAtributoStr[itensArray[j]];
         }
+        return atributos;
     }
 
     // public void addSinonimo(Pattern sinonimo){
